@@ -1,19 +1,26 @@
 interface Response {
     token: string;
     user: {
-        name: string,
+        id: number,
+        nome: string,
+        sobrenome: string,
         email: string,
+        avatar: string
     };
 }
 
-export function signIn(): Promise<Response> {
+export function signIn(data:any): Promise<Response> {
+    const { token } = data;
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({
-                token: "jk12h3j21h3jk212h3jk12h3jkh12j3kh12k123hh21g3f12f3",
+                token: token,
                 user: {
-                    name: "Thiago",
-                    email: "thiagomarinho@rockeseat.com.br",
+                    id: data.getUserData[0].id,
+                    nome: data.getUserData[0].nome,
+                    sobrenome: data.getUserData[0].sobrenome,
+                    email: data.getUserData[0].email,
+                    avatar: data.getUserData[0].avatar
                 },
             });
         }, 2000);

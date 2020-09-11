@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import { View, Text, ImageBackground, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ImageBackground, TouchableOpacity, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import landingImg from '../../assets/images/teste.png';
 import Show from '../../assets/images/show.jpg';
@@ -19,8 +20,24 @@ function Menu() {
         navigate('Study');
     }
 
-    function handleNavigateToNewEvento() {
-        navigate('NewEvent');
+    async function handleNavigateToNewEvento() {
+        const userData = await AsyncStorage.getItem('@RNAuth:user');
+        if (JSON.parse(userData) == null) {
+            Alert.alert(
+                "Erro de Acesso",
+                "Você não pode acessar, pois não está logado!",
+                [
+                    {
+                        text: "Fazer Login",
+                        onPress: () => navigate('Login')
+                    },
+
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ],
+            );
+        } else {
+            navigate('NewEvent');
+        }
     }
 
     function handleLogout() {
