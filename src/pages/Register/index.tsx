@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import PageHeader from '../../components/PageHeader';
 import { useNavigation } from '@react-navigation/native';
+import AuthContext from '../../contexts/auth';
 
 import styles from './styles';
 import api from '../../services/api';
@@ -14,9 +15,10 @@ function Register() {
     const [ senha, setSenha ] = useState('');
     const [ confirmePassword, setConfirmePassword ] = useState('');
     const { navigate } = useNavigation();
+    const { authRegister } = useContext(AuthContext);
 
     async function handleSubmit() {
-        if (senha === confirmePassword) {
+        if (senha === confirmePassword && senha != '' && confirmePassword != '') {
             api.post('users', {
                 nome,
                 sobrenome,
@@ -25,8 +27,7 @@ function Register() {
             }).then((response) => {
                 alert('Cadastro realizado com sucesso!');
                 
-                navigate('Menu');
-                //authRegister(response.data);
+                authRegister(response.data);
             }).catch(() => {
                 alert('Erro ao realizar o cadastro!');
             })

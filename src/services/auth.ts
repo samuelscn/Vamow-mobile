@@ -26,3 +26,21 @@ export function signIn(data:any): Promise<Response> {
         }, 2000);
     });
 }
+
+export function authRegister(data:any): Promise<Response> {
+    const { token } = data;
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                token: token,
+                user: {
+                    id: data.getUserData.id,
+                    nome: data.getUserData.nome,
+                    sobrenome: data.getUserData.sobrenome,
+                    email: data.getUserData.email,
+                    avatar: data.getUserData.avatar
+                },
+            });
+        }, 2000);
+    });
+}

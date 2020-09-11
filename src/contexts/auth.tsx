@@ -9,6 +9,7 @@ interface AuthContextData {
     user: object | null;
     loading: boolean;
     signIn(data:any): Promise<void>;
+    authRegister(data:any): Promise<void>;
     signOut(): void;
 }
 
@@ -45,8 +46,15 @@ export const AuthProvider: React.FC = ({ children }) => {
         await AsyncStorage.setItem('@RNAuth:user', JSON.stringify(response.user));
         await AsyncStorage.setItem('@RNAuth:token', response.token);
         api.defaults.headers.Authorization = `Bearer ${response.token}`;
+    }
 
-        //navigate('Menu');
+    async function authRegister(data:any) {
+        const response = await auth.authRegister(data);
+        setUser(response.user);
+
+        await AsyncStorage.setItem('@RNAuth:user', JSON.stringify(response.user));
+        await AsyncStorage.setItem('@RNAuth:token', response.token);
+        api.defaults.headers.Authorization = `Bearer ${response.token}`;
     }
 
     async function signOut() {
@@ -55,7 +63,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ signed: !!user, user, loading, signIn, signOut }}>
+        <AuthContext.Provider value={{ signed: !!user, user, loading, signIn, authRegister, signOut }}>
             {children}
         </AuthContext.Provider>
     );
